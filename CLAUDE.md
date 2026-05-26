@@ -32,14 +32,14 @@ pnpm test:e2e         # Playwright e2e tests only (tests/e2e/)
 - `src/app/(payload)/` — Payload admin panel (`/admin`) and API routes (`/api`, `/api/graphql`).
 
 ### Payload Config
-- **Collections**: Pages, Posts, Media, Categories, Users — defined in `src/collections/`.
+- **Collections**: Pages, Posts, Tours, Media, Categories, TourCategories, Users — defined in `src/collections/`.
 - **Globals**: Header, Footer — defined in `src/Header/config.ts` and `src/Footer/config.ts`.
-- **Plugins**: redirects, nested-docs (categories), SEO, form-builder, search (posts only) — configured in `src/plugins/index.ts`.
+- **Plugins**: redirects, nested-docs (categories + tour-categories), SEO, form-builder, search (posts only) — configured in `src/plugins/index.ts`.
 - **Editor**: Lexical rich text (`src/fields/defaultLexical.ts`).
 - **Types**: Auto-generated at `src/payload-types.ts` — run `pnpm generate:types` after changing collection/global schemas.
 
 ### Blocks
-Content blocks in `src/blocks/` (ArchiveBlock, Banner, CallToAction, Code, Content, Form, MediaBlock, RelatedPosts). Rendered via `src/blocks/RenderBlocks.tsx`.
+Content blocks in `src/blocks/` (ArchiveBlock, Banner, CallToAction, Code, Content, FeaturedTours, Form, MediaBlock, RelatedPosts, Testimonials, TourArchive, TourCategoriesShowcase). Rendered via `src/blocks/RenderBlocks.tsx`.
 
 ### Access Control
 Reusable access functions in `src/access/`: `authenticated`, `authenticatedOrPublished`, `anyone`.
@@ -49,11 +49,11 @@ Reusable access functions in `src/access/`: `authenticated`, `authenticatedOrPub
 - **Fonts**: Geist Sans + Geist Mono.
 - **Theme**: Dark/light via `src/providers/Theme/`, with `InitTheme` script to prevent FOUC.
 - **Live Preview**: Supported via `@payloadcms/live-preview-react` — pages have `.client.tsx` counterparts for preview mode.
-- **Heros**: Three tiers in `src/heros/` (HighImpact, MediumImpact, LowImpact) plus PostHero.
+- **Heros**: Three tiers in `src/heros/` (HighImpact, MediumImpact, LowImpact) plus PostHero and TourHero.
 
 ### Path Aliases
 - `@/*` → `src/*`
 - `@payload-config` → `src/payload.config.ts`
 
 ### Database
-SQLite via `DATABASE_URL` env var. The `.env.example` shows MongoDB/Postgres URLs but the actual config uses `sqliteAdapter`.
+SQLite via Turso (libSQL). Requires `DATABASE_URL` and `DATABASE_AUTH_TOKEN` env vars. The `sqliteAdapter` connects to the remote Turso database.

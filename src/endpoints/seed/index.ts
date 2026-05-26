@@ -9,12 +9,15 @@ import { imageHero1 } from './image-hero-1'
 import { post1 } from './post-1'
 import { post2 } from './post-2'
 import { post3 } from './post-3'
+import { seedTours } from './tours'
 
 const collections: CollectionSlug[] = [
   'categories',
   'media',
   'pages',
   'posts',
+  'tours',
+  'tour-categories',
   'forms',
   'form-submissions',
   'search',
@@ -225,6 +228,13 @@ export const seed = async ({
           {
             link: {
               type: 'custom',
+              label: 'Tours',
+              url: '/tours',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
               label: 'Posts',
               url: '/posts',
             },
@@ -273,6 +283,8 @@ export const seed = async ({
       },
     }),
   ])
+
+  await seedTours({ payload, req })
 
   payload.logger.info('Seeded database successfully!')
 }

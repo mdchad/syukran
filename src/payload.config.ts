@@ -8,6 +8,8 @@ import { Categories } from './collections/Categories'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
+import { TourCategories } from './collections/TourCategories'
+import { Tours } from './collections/Tours'
 import { Users } from './collections/Users'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
@@ -63,7 +65,7 @@ export default buildConfig({
       authToken: process.env.DATABASE_AUTH_TOKEN,
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users],
+  collections: [Pages, Posts, Tours, Media, Categories, TourCategories, Users],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins,

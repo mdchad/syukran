@@ -5,15 +5,23 @@ import type { Page } from '@/payload-types'
 import { ArchiveBlock } from '@/blocks/ArchiveBlock/Component'
 import { CallToActionBlock } from '@/blocks/CallToAction/Component'
 import { ContentBlock } from '@/blocks/Content/Component'
+import { FeaturedToursBlock } from '@/blocks/FeaturedTours/Component'
 import { FormBlock } from '@/blocks/Form/Component'
 import { MediaBlock } from '@/blocks/MediaBlock/Component'
+import { TestimonialsBlock } from '@/blocks/Testimonials/Component'
+import { TourArchiveBlock } from '@/blocks/TourArchive/Component'
+import { TourCategoriesShowcaseBlock } from '@/blocks/TourCategoriesShowcase/Component'
 
 const blockComponents = {
   archive: ArchiveBlock,
   content: ContentBlock,
   cta: CallToActionBlock,
+  featuredTours: FeaturedToursBlock,
   formBlock: FormBlock,
   mediaBlock: MediaBlock,
+  testimonials: TestimonialsBlock,
+  tourArchive: TourArchiveBlock,
+  tourCategoriesShowcase: TourCategoriesShowcaseBlock,
 }
 
 export const RenderBlocks: React.FC<{

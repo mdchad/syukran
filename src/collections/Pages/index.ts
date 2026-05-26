@@ -5,8 +5,12 @@ import { authenticatedOrPublished } from '../../access/authenticatedOrPublished'
 import { Archive } from '../../blocks/ArchiveBlock/config'
 import { CallToAction } from '../../blocks/CallToAction/config'
 import { Content } from '../../blocks/Content/config'
+import { FeaturedTours } from '../../blocks/FeaturedTours/config'
 import { FormBlock } from '../../blocks/Form/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
+import { Testimonials } from '../../blocks/Testimonials/config'
+import { TourArchive } from '../../blocks/TourArchive/config'
+import { TourCategoriesShowcase } from '../../blocks/TourCategoriesShowcase/config'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
 import { populatePublishedAt } from '../../hooks/populatePublishedAt'
@@ -72,7 +76,7 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock],
+              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock, FeaturedTours, TourCategoriesShowcase, Testimonials, TourArchive],
               required: true,
               admin: {
                 initCollapsed: true,

@@ -69,8 +69,10 @@ export interface Config {
   collections: {
     pages: Page;
     posts: Post;
+    tours: Tour;
     media: Media;
     categories: Category;
+    'tour-categories': TourCategory;
     users: User;
     redirects: Redirect;
     forms: Form;
@@ -91,8 +93,10 @@ export interface Config {
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
+    tours: ToursSelect<false> | ToursSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    'tour-categories': TourCategoriesSelect<false> | TourCategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
@@ -201,7 +205,17 @@ export interface Page {
       | null;
     media?: (number | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (
+    | CallToActionBlock
+    | ContentBlock
+    | MediaBlock
+    | ArchiveBlock
+    | FormBlock
+    | FeaturedToursBlock
+    | TourCategoriesShowcaseBlock
+    | TestimonialsBlock
+    | TourArchiveBlock
+  )[];
   meta?: {
     title?: string | null;
     /**
@@ -783,6 +797,298 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeaturedToursBlock".
+ */
+export interface FeaturedToursBlock {
+  introContent?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  populateBy?: ('collection' | 'selection') | null;
+  tourCategories?: (number | TourCategory)[] | null;
+  limit?: number | null;
+  selectedDocs?:
+    | {
+        relationTo: 'tours';
+        value: number | Tour;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'featuredTours';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tour-categories".
+ */
+export interface TourCategory {
+  id: number;
+  title: string;
+  description?: string | null;
+  /**
+   * Icon name (e.g. Lucide icon name) or emoji
+   */
+  icon?: string | null;
+  coverImage?: (number | null) | Media;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  parent?: (number | null) | TourCategory;
+  breadcrumbs?:
+    | {
+        doc?: (number | null) | TourCategory;
+        url?: string | null;
+        label?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tours".
+ */
+export interface Tour {
+  id: number;
+  title: string;
+  featuredImage?: (number | null) | Media;
+  description?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  gallery?:
+    | {
+        image: number | Media;
+        id?: string | null;
+      }[]
+    | null;
+  highlights?:
+    | {
+        highlight: string;
+        id?: string | null;
+      }[]
+    | null;
+  itinerary?:
+    | {
+        day: number;
+        title: string;
+        description?: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        meals?: ('breakfast' | 'lunch' | 'dinner')[] | null;
+        accommodation?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  destination: string;
+  /**
+   * e.g. "5 Days / 4 Nights"
+   */
+  duration: string;
+  difficulty?: ('easy' | 'moderate' | 'challenging' | 'difficult') | null;
+  groupSize?: {
+    min?: number | null;
+    max?: number | null;
+  };
+  departureDates?:
+    | {
+        date: string;
+        status?: ('available' | 'limited' | 'soldOut') | null;
+        id?: string | null;
+      }[]
+    | null;
+  pricing: {
+    adult: number;
+    child?: number | null;
+    infant?: number | null;
+  };
+  pickupLocations?:
+    | {
+        location: string;
+        /**
+         * e.g. "6:00 AM"
+         */
+        time?: string | null;
+        id?: string | null;
+      }[]
+    | null;
+  included?:
+    | {
+        item: string;
+        id?: string | null;
+      }[]
+    | null;
+  excluded?:
+    | {
+        item: string;
+        id?: string | null;
+      }[]
+    | null;
+  faq?:
+    | {
+        question: string;
+        answer: string;
+        id?: string | null;
+      }[]
+    | null;
+  meta?: {
+    title?: string | null;
+    /**
+     * Maximum upload file size: 12MB. Recommended file size for images is <500KB.
+     */
+    image?: (number | null) | Media;
+    description?: string | null;
+  };
+  publishedAt?: string | null;
+  /**
+   * Display price (adult rate)
+   */
+  price?: number | null;
+  tourCategories?: (number | TourCategory)[] | null;
+  relatedTours?: (number | Tour)[] | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TourCategoriesShowcaseBlock".
+ */
+export interface TourCategoriesShowcaseBlock {
+  introContent?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  categories?: (number | TourCategory)[] | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'tourCategoriesShowcase';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TestimonialsBlock".
+ */
+export interface TestimonialsBlock {
+  introContent?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  testimonials?:
+    | {
+        quote: string;
+        author: string;
+        /**
+         * e.g. "Traveler from KL"
+         */
+        role?: string | null;
+        rating?: number | null;
+        image?: (number | null) | Media;
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'testimonials';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TourArchiveBlock".
+ */
+export interface TourArchiveBlock {
+  introContent?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  populateBy?: ('collection' | 'selection') | null;
+  tourCategories?: (number | TourCategory)[] | null;
+  limit?: number | null;
+  selectedDocs?:
+    | {
+        relationTo: 'tours';
+        value: number | Tour;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'tourArchive';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -801,6 +1107,10 @@ export interface Redirect {
       | ({
           relationTo: 'posts';
           value: number | Post;
+        } | null)
+      | ({
+          relationTo: 'tours';
+          value: number | Tour;
         } | null);
     url?: string | null;
   };
@@ -980,12 +1290,20 @@ export interface PayloadLockedDocument {
         value: number | Post;
       } | null)
     | ({
+        relationTo: 'tours';
+        value: number | Tour;
+      } | null)
+    | ({
         relationTo: 'media';
         value: number | Media;
       } | null)
     | ({
         relationTo: 'categories';
         value: number | Category;
+      } | null)
+    | ({
+        relationTo: 'tour-categories';
+        value: number | TourCategory;
       } | null)
     | ({
         relationTo: 'users';
@@ -1089,6 +1407,10 @@ export interface PagesSelect<T extends boolean = true> {
         mediaBlock?: T | MediaBlockSelect<T>;
         archive?: T | ArchiveBlockSelect<T>;
         formBlock?: T | FormBlockSelect<T>;
+        featuredTours?: T | FeaturedToursBlockSelect<T>;
+        tourCategoriesShowcase?: T | TourCategoriesShowcaseBlockSelect<T>;
+        testimonials?: T | TestimonialsBlockSelect<T>;
+        tourArchive?: T | TourArchiveBlockSelect<T>;
       };
   meta?:
     | T
@@ -1190,6 +1512,61 @@ export interface FormBlockSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeaturedToursBlock_select".
+ */
+export interface FeaturedToursBlockSelect<T extends boolean = true> {
+  introContent?: T;
+  populateBy?: T;
+  tourCategories?: T;
+  limit?: T;
+  selectedDocs?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TourCategoriesShowcaseBlock_select".
+ */
+export interface TourCategoriesShowcaseBlockSelect<T extends boolean = true> {
+  introContent?: T;
+  categories?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TestimonialsBlock_select".
+ */
+export interface TestimonialsBlockSelect<T extends boolean = true> {
+  introContent?: T;
+  testimonials?:
+    | T
+    | {
+        quote?: T;
+        author?: T;
+        role?: T;
+        rating?: T;
+        image?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TourArchiveBlock_select".
+ */
+export interface TourArchiveBlockSelect<T extends boolean = true> {
+  introContent?: T;
+  populateBy?: T;
+  tourCategories?: T;
+  limit?: T;
+  selectedDocs?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "posts_select".
  */
 export interface PostsSelect<T extends boolean = true> {
@@ -1213,6 +1590,102 @@ export interface PostsSelect<T extends boolean = true> {
         id?: T;
         name?: T;
       };
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tours_select".
+ */
+export interface ToursSelect<T extends boolean = true> {
+  title?: T;
+  featuredImage?: T;
+  description?: T;
+  gallery?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  highlights?:
+    | T
+    | {
+        highlight?: T;
+        id?: T;
+      };
+  itinerary?:
+    | T
+    | {
+        day?: T;
+        title?: T;
+        description?: T;
+        meals?: T;
+        accommodation?: T;
+        id?: T;
+      };
+  destination?: T;
+  duration?: T;
+  difficulty?: T;
+  groupSize?:
+    | T
+    | {
+        min?: T;
+        max?: T;
+      };
+  departureDates?:
+    | T
+    | {
+        date?: T;
+        status?: T;
+        id?: T;
+      };
+  pricing?:
+    | T
+    | {
+        adult?: T;
+        child?: T;
+        infant?: T;
+      };
+  pickupLocations?:
+    | T
+    | {
+        location?: T;
+        time?: T;
+        id?: T;
+      };
+  included?:
+    | T
+    | {
+        item?: T;
+        id?: T;
+      };
+  excluded?:
+    | T
+    | {
+        item?: T;
+        id?: T;
+      };
+  faq?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  meta?:
+    | T
+    | {
+        title?: T;
+        image?: T;
+        description?: T;
+      };
+  publishedAt?: T;
+  price?: T;
+  tourCategories?: T;
+  relatedTours?: T;
   generateSlug?: T;
   slug?: T;
   updatedAt?: T;
@@ -1319,6 +1792,29 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface CategoriesSelect<T extends boolean = true> {
   title?: T;
+  generateSlug?: T;
+  slug?: T;
+  parent?: T;
+  breadcrumbs?:
+    | T
+    | {
+        doc?: T;
+        url?: T;
+        label?: T;
+        id?: T;
+      };
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "tour-categories_select".
+ */
+export interface TourCategoriesSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  icon?: T;
+  coverImage?: T;
   generateSlug?: T;
   slug?: T;
   parent?: T;
@@ -1761,6 +2257,10 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'posts';
           value: number | Post;
+        } | null)
+      | ({
+          relationTo: 'tours';
+          value: number | Tour;
         } | null);
     global?: string | null;
     user?: (number | null) | User;
