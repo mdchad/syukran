@@ -68,6 +68,7 @@ export const Tours: CollectionConfig<'tours'> = {
       name: 'title',
       type: 'text',
       required: true,
+      localized: true,
     },
     {
       type: 'tabs',
@@ -83,6 +84,7 @@ export const Tours: CollectionConfig<'tours'> = {
             {
               name: 'description',
               type: 'richText',
+              localized: true,
               editor: lexicalEditor({
                 features: ({ rootFeatures }) => {
                   return [
@@ -114,6 +116,7 @@ export const Tours: CollectionConfig<'tours'> = {
               name: 'highlights',
               type: 'array',
               label: 'Highlights',
+              localized: true,
               admin: {
                 initCollapsed: true,
               },
@@ -181,11 +184,13 @@ export const Tours: CollectionConfig<'tours'> = {
               name: 'destination',
               type: 'text',
               required: true,
+              localized: true,
             },
             {
               name: 'duration',
               type: 'text',
               required: true,
+              localized: true,
               admin: {
                 description: 'e.g. "5 Days / 4 Nights"',
               },
@@ -289,6 +294,7 @@ export const Tours: CollectionConfig<'tours'> = {
               name: 'included',
               type: 'array',
               label: 'What\'s Included',
+              localized: true,
               admin: {
                 initCollapsed: true,
               },
@@ -304,6 +310,7 @@ export const Tours: CollectionConfig<'tours'> = {
               name: 'excluded',
               type: 'array',
               label: 'What\'s Excluded',
+              localized: true,
               admin: {
                 initCollapsed: true,
               },
@@ -319,6 +326,7 @@ export const Tours: CollectionConfig<'tours'> = {
               name: 'faq',
               type: 'array',
               label: 'FAQ',
+              localized: true,
               admin: {
                 initCollapsed: true,
               },

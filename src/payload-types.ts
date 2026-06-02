@@ -70,6 +70,7 @@ export interface Config {
     pages: Page;
     posts: Post;
     tours: Tour;
+    reviews: Review;
     media: Media;
     categories: Category;
     'tour-categories': TourCategory;
@@ -94,6 +95,7 @@ export interface Config {
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     tours: ToursSelect<false> | ToursSelect<true>;
+    reviews: ReviewsSelect<false> | ReviewsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     'tour-categories': TourCategoriesSelect<false> | TourCategoriesSelect<true>;
@@ -112,7 +114,7 @@ export interface Config {
   db: {
     defaultIDType: number;
   };
-  fallbackLocale: null;
+  fallbackLocale: ('false' | 'none' | 'null') | false | null | ('en' | 'ms' | 'ar') | ('en' | 'ms' | 'ar')[];
   globals: {
     header: Header;
     footer: Footer;
@@ -121,7 +123,7 @@ export interface Config {
     header: HeaderSelect<false> | HeaderSelect<true>;
     footer: FooterSelect<false> | FooterSelect<true>;
   };
-  locale: null;
+  locale: 'en' | 'ms' | 'ar';
   widgets: {
     collections: CollectionsWidget;
   };
@@ -306,6 +308,7 @@ export interface Media {
     };
     [k: string]: unknown;
   } | null;
+  prefix?: string | null;
   folder?: (number | null) | FolderInterface;
   updatedAt: string;
   createdAt: string;
@@ -1089,6 +1092,28 @@ export interface TourArchiveBlock {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviews".
+ */
+export interface Review {
+  id: number;
+  author: string;
+  /**
+   * e.g. "Traveler from Kuala Lumpur"
+   */
+  role?: string | null;
+  quote: string;
+  rating: number;
+  /**
+   * Author photo / avatar
+   */
+  image?: (number | null) | Media;
+  status: 'pending' | 'approved' | 'rejected';
+  publishedAt?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1144,10 +1169,15 @@ export interface Search {
   id: number;
   title?: string | null;
   priority?: number | null;
-  doc: {
-    relationTo: 'posts';
-    value: number | Post;
-  };
+  doc:
+    | {
+        relationTo: 'posts';
+        value: number | Post;
+      }
+    | {
+        relationTo: 'tours';
+        value: number | Tour;
+      };
   slug?: string | null;
   meta?: {
     title?: string | null;
@@ -1292,6 +1322,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'tours';
         value: number | Tour;
+      } | null)
+    | ({
+        relationTo: 'reviews';
+        value: number | Review;
       } | null)
     | ({
         relationTo: 'media';
@@ -1694,11 +1728,27 @@ export interface ToursSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviews_select".
+ */
+export interface ReviewsSelect<T extends boolean = true> {
+  author?: T;
+  role?: T;
+  quote?: T;
+  rating?: T;
+  image?: T;
+  status?: T;
+  publishedAt?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "media_select".
  */
 export interface MediaSelect<T extends boolean = true> {
   alt?: T;
   caption?: T;
+  prefix?: T;
   folder?: T;
   updatedAt?: T;
   createdAt?: T;
